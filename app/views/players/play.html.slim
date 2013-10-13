@@ -17,9 +17,10 @@ h2 Quiz
      ' Correct answer is
      b = pair['a'][d]
 
+  hr
+  = button_to 'Next Question', play_player_path(@pl, @step + 1)
+
 - else
   p Quiz is not started
 
-hr
-= button_to 'Next Question', play_player_path(@pl, @step + 1)
-
+  = button_to 'Next Question', play_player_path(@pl)
