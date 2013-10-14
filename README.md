@@ -2,6 +2,8 @@
 
 ## 使い方
 
+Don't forget "bundle exec rake db:seed RAILS_ENV=xxxx" before starting app initially. 
+
 ### クイズの作成
 
 トップページから `Quizzes` リンクをクリック。
