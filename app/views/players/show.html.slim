@@ -1,7 +1,7 @@
+@page(data-fullscreen='true')
+  @header
+    h3 = @pl.name
 
-b Name:
-=< @pl.name
-br
-= form_tag play_player_path(@pl, 1), 'data-ajax' => 'false' do
-  button Start Quiz
+  = form_tag play_player_path(@pl, 1), 'data-ajax' => 'false' do
+    button Start Quiz
 

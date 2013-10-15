@@ -1,28 +1,32 @@
 @page(data-fullscreen='true')
+  - pair = @pl.play.data_obj[@step - 1]
+  - player_answer = @pl.decision_array[@step - 1]
+
   @header
     h3 = @pl.name
-    a.ui-btn-right(data-ajax='false' data-icon='arrow-r'data-iconpos='right' data-theme='b' href=play_player_path(@pl, @step + 1)) Next
+    - if player_answer || @pl.play.decision_of(@step)
+      a.ui-btn-right *{ data: { ajax: 'false', icon: 'arrow-r', iconpos: 'right', theme: 'b' }, href:play_player_path(@pl, @step + 1) }
+        | Next
+    - else
+      a.ui-btn-right *{ data: { ajax: 'false', icon: 'refresh' }, href:play_player_path(@pl, @step) }
+        | Refresh
 
-  - if @step
-    - pair = @pl.play.data_obj[@step - 1]
-    div(data-role="content") = pair['q']
-    div(data-role="content")
-      - if ix = @pl.decision_array[@step - 1]
-        'You choose
-        strong = pair['a'][ix]
-      - else
-        'Not chosen
+  @content
+    = pair['q']
 
-    @content
-      - pair['a'].each_with_index do |a, ix|
-        = form_tag play_player_path(@pl, @step) do
-          button@button = a
-          = hidden_field_tag 'decision', ix
-    - if d = @pl.play.decision_of(@step)
-      p
-       ' Correct answer is
-       b = pair['a'][d]
+  @content
+    - if player_answer
+      ' You choose
+      strong = pair['a'][player_answer]
+    - else
+      'Not chosen
 
-  - else
-    p Quiz is not started
-
+  @content
+    - pair['a'].each_with_index do |a, ix|
+      = form_tag play_player_path(@pl, @step) do
+        button@button = a
+        = hidden_field_tag 'decision', ix
+  - if d = @pl.play.decision_of(@step)
+    p
+     ' Correct answer is
+     b = pair['a'][d]
