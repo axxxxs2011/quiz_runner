@@ -21,7 +21,9 @@ table(border=1)
       - sum = 0
       - @p.data_obj.each_with_index do |pair, ix|
         td(data-type="mark")
-          - if pl.decision_array[ix] == @p.decision_array[ix]
+          - if ix == 0
+            | -
+          - elsif pl.decision_array[ix] == @p.decision_array[ix]
             - sum += 1
             | o
           - else

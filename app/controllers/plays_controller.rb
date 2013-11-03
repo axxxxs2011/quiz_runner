@@ -61,6 +61,15 @@ class PlaysController < ApplicationController
     render
   end
 
+  def result_chart
+    @p = Play.find(params[:id])
+    unless @p.finished?
+      redirect_to play_play_path(@p)
+      return
+    end
+    render layout: 'chart'
+  end
+
   private
 
   # :: Int

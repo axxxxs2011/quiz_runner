@@ -50,5 +50,9 @@ class Play < ActiveRecord::Base
     self.step += 1
     save!
   end
+
+  def results_data_table
+    players.map {|pl| [pl.name, pl.total_score(self)] }
+  end
 end
 

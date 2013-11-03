@@ -19,5 +19,13 @@ class Player < ActiveRecord::Base
     self.decision = ary.to_json
     save!
   end
+  # :: Play -> Int
+  def total_score(play)
+    sum = 0;
+    play.decision_array.each_with_index{|v, i|
+      sum += 1 if v == decision_array[i] && i != 0 # exclude an example
+    }
+    sum
+  end
 end
 

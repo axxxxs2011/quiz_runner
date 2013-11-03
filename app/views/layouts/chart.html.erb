@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Chart</title>
+  <%= csrf_meta_tags %>
+  <%= yield :head %>
+  <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+
+</head>
+<body>
+
+<%= yield %>
+<%= yield :tail %>
+</body>
+</html>

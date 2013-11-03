@@ -10,6 +10,7 @@ QuizRunner::Application.routes.draw do
       member do
         post :players, action: 'create_player'
         get  :result
+        get  :result_chart
         get  "/play(/:step)", action: 'play', as: :play, step: num_ptn
         post "/play(/:step)", action: 'do_play', step: num_ptn
       end
