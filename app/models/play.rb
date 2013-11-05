@@ -52,7 +52,12 @@ class Play < ActiveRecord::Base
   end
 
   def results_data_table
-    players.map {|pl| [pl.name, pl.total_score(self)] }
+    data_table = players.map {|pl| [pl.name, pl.total_score(self)] }
+    data_table.sort {|a, b| b[1] <=> a[1]}
+  end
+
+  def max_score
+    self.decision_array.size - 1;
   end
 end
 

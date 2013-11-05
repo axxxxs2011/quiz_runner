@@ -14,13 +14,15 @@ javascript:
   google.load('visualization', '1.0', {'packages':['corechart']});
   google.setOnLoadCallback(initChart);
   var results = #{{@p.results_data_table.to_json}};
+  var maxScore = #{{@p.max_score}};
   var initResults = [];
   for (i = 0; i < results.length; i++) {
-    initResults.push([results[i][0], 0]);
+    initResults.push(['?', 0]);
   }
   var chartManager = {
     length: results.length,
-    middle: ~~(results.length / 2)
+    middle: ~~(results.length / 2),
+    animationDuration: 4000
   }
   var initChart = function(cm) {
     cm.data1 = new google.visualization.DataTable();
@@ -33,15 +35,20 @@ javascript:
 
     var clientWidth = window.innerWidth;
     var clientHeight = window.innerHeight;
+    var i = 0;
+    var ticks = [];
+    for (i = 0; i <= maxScore; i++) {
+      ticks.push({v: i, f: i.toString(10)});
+    }
     cm.options = {
       width: (clientWidth - 20) / 2 ,
       height: clientHeight - 20,
       animation: {
-        duration: 1000,
-        easing: 'out'
+        easing: 'linear'
       },
       hAxis: {
-        viewWindow: {min:0, max: cm.length}
+        viewWindow: {min:0, max: maxScore},
+        ticks: ticks
       },
       legend: 'none'
     };
@@ -56,7 +63,8 @@ javascript:
     drawChart(cm);
   }
 
-  var drawChart = function(cm) {
+  var drawChart = function(cm, animated) {
+    cm.options.animation.duration = animated ? cm.animationDuration : 0;
     cm.chartLeft.draw(cm.data1, cm.options);
     cm.chartRight.draw(cm.data2, cm.options);
   }
@@ -64,13 +72,24 @@ javascript:
   var showResults = function(cm) {
     var i = 0;
     for (i = 0; i < cm.middle; i++) {
+      cm.data1.setValue(i, 0, results[i][0]);
+    }
+
+    for (i = 0; i < cm.length - cm.middle; i++) {
+      cm.data2.setValue(i, 0, results[i + cm.middle][0]);
+    }
+    drawChart(cm, false);
+
+    for (i = 0; i < cm.middle; i++) {
       cm.data1.setValue(i, 1, results[i][1]);
     }
 
     for (i = 0; i < cm.length - cm.middle; i++) {
       cm.data2.setValue(i, 1, results[i + cm.middle][1]);
     }
-    drawChart(cm);
+    drawChart(cm, true);
+    setTimeout(function() {
+    }, cm.animationDuration);
   }
   window.onload = function() {
     initChart(chartManager);
