@@ -4,7 +4,7 @@
 
   @header
     /h3 = @pl.name
-    h3 = "Question "+@step.to_s
+    h3 = "Question "+(@step - 1).to_s
     - if player_answer || @pl.play.decision_of(@step)
       a.ui-btn-right *{ data: { ajax: 'false', icon: 'arrow-r', iconpos: 'right', theme: 'b' }, href:play_player_path(@pl, @step + 1) }
         | Next
