@@ -1,14 +1,20 @@
 sass:
   .quiz-runner-left
-    float: left
+    position: absolute
+    left: 0px
+    margin-left: 30px
   .quiz-runner-right
-    float: right
-  #show-results-button
-    position: fixed
+    position: absolute
+    right: 0px
+    margin-left: 30px
+  .quiz-runner-title
     z-index: 5
-    left: 50px
-    top: 30px
-    width: 100px
+    display: block
+    width: 460px
+    height: 85px
+    margin: 0 auto
+  .quiz-runner-crown
+    position: absolute
 javascript:
   var i;
   google.load('visualization', '1.0', {'packages':['corechart']});
@@ -22,7 +28,9 @@ javascript:
   var chartManager = {
     length: results.length,
     middle: ~~(results.length / 2),
-    animationDuration: 4000
+    animationDuration: 4000,
+    crownImgWidth: 60,
+    crownImgHeight: 50
   }
   var initChart = function(cm) {
     cm.data1 = new google.visualization.DataTable();
@@ -34,15 +42,22 @@ javascript:
     cm.chartRight = new google.visualization.BarChart(cm.chartRightElement);
 
     var clientWidth = window.innerWidth;
-    var clientHeight = window.innerHeight;
+    var clientHeight = window.innerHeight - 85;
     var i = 0;
     var ticks = [];
     for (i = 0; i <= maxScore; i++) {
       ticks.push({v: i, f: i.toString(10)});
     }
+    cm.chartAreaHeight = clientHeight - 100;
+    cm.chartAreaTop = 50;
     cm.options = {
-      width: (clientWidth - 20) / 2 ,
+      width: (clientWidth - 25) / 2 ,
       height: clientHeight - 20,
+      left: cm.crownImgWidth,
+      chartArea: {
+        top: cm.chartAreaTop, left: 'auto',
+        height: cm.chartAreaHeight
+      },
       animation: {
         easing: 'linear'
       },
@@ -89,13 +104,37 @@ javascript:
     }
     drawChart(cm, true);
     setTimeout(function() {
+      var i;
+      var highScore = results[0][1];
+      for (i = 0; i < cm.middle; i++) {
+        if (highScore == results[i][1]) {
+          markCrown(cm.chartLeftElement, i, cm.middle, cm);
+        }
+      }
+      for (i = 0; i < cm.length - cm.middle; i++) {
+        if (highScore == results[i + cm.middle][1]) {
+          markCrown(cm.chartRightElement, i, cm.length - cm.middle, cm);
+        }
+      }
     }, cm.animationDuration);
+  }
+
+  var markCrown = function(container, index, rowNumber, cm) {
+    var crownImg = document.createElement('img');
+    crownImg.id = 'crown-' + index;
+    crownImg.className = 'quiz-runner-crown';
+    crownImg.src = '/clown-gl01_b.png';
+    crownImg.width = cm.crownImgWidth;
+    crownImg.height = cm.crownImgHeight;
+    crownImg.style.top = (index + 0.5)  * (cm.chartAreaHeight / rowNumber) +
+      cm.chartAreaTop - (cm.crownImgHeight/2) + 'px';
+    crownImg.style.marginLeft = -(cm.crownImgWidth/4) + 'px';
+    container.appendChild(crownImg);
   }
   window.onload = function() {
     initChart(chartManager);
   }
-
-= button_to_function "show", "showResults(chartManager)", id: 'show-results-button'
+img.quiz-runner-title src= root_url+"result_title.png" onclick="showResults(chartManager);"
 
 div#chart-left.quiz-runner-left
 div#chart-right.quiz-runner-right
