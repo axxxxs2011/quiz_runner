@@ -5,3 +5,6 @@
   = form_tag play_player_path(@pl, 1), 'data-ajax' => 'false' do
     button Start Quiz
 
+  - if !@pl.play.started? && @is_redirected
+    #message クイズがはじまるまで待ってね。
+

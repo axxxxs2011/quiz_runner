@@ -19,7 +19,7 @@ class Play < ActiveRecord::Base
 
   # :: Bool
   def finished?
-    last?(step)
+    last?(decision_array.size)
   end
 
   # :: Int -> Bool
