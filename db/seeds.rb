@@ -47,6 +47,22 @@ begin
   q = Quiz.where(title: title).first_or_create!
   q.questions = qs.to_json
   q.save!
+
+  p = Play.create! do |p|
+    p.data = q.questions
+    p.memo = '本番'
+  end
+
+  player_names = ['つつじ', 'ひいろ',
+                  'ききょう','あお',
+                  'そらいろ', 'ぐんじょう',
+                  'わかくさ', 'きいろ',
+                  'だいだい', 'はだいろ'];
+  player_names.each {|n|
+    p.players.create! do |pl|
+      pl.name = n
+    end
+  }
 end
 
 
