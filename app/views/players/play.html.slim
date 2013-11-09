@@ -14,6 +14,13 @@
 
   @content
     img#upper-image src= root_url+"client_plant_top.png"
+    /! show message if question is closed
+    - if @step < @pl.play.step
+      #message 次の問題が出題されてるよ！はやくNextボタンを押して！
+    - elsif @pl.play.finished?
+      #message 終わりだよ。おつかれさま♪
+    - elsif @step <= @pl.play.decision_array.size
+      #message もう締め切っちゃったよー。次の問題が出題されるまで待っててね。
     #question = pair['q']
 
 

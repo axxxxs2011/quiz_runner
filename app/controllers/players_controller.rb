@@ -5,6 +5,7 @@ class PlayersController < ApplicationController
   layout 'application_smart_phone'
 
   def show
+    @is_redirected = params[:is_redirected] == 'true'
     render
   end
 
@@ -29,7 +30,7 @@ class PlayersController < ApplicationController
 
   def normalize_step
     unless @pl.play.started?
-      redirect_to player_path(@pl)
+      redirect_to player_path(@pl) + '?is_redirected=true'
       return false
     end
     @step = params[:step].to_i
